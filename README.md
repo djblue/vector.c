@@ -1,5 +1,7 @@
 # vector.c
 
+[![Build Status](https://travis-ci.org/djblue/vector.c.svg)](https://travis-ci.org/djblue/vector.c)
+
 Basic c vector class. Has a similar api to arrays in javascript.
 
 # building
