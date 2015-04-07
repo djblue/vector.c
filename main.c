@@ -86,14 +86,23 @@ int main (int argc, char *argv[]) {
 
   begin("vector#slice()");
     vector *v = vec(), *s;
+
     s = vector_slice(v, 0, 1);
     assert(s->length == 1, "correctly sliced");
     assert(vector_get_t(int, s, 0) == 0, "correctly sliced");
     vector_free(s);
+
     s = vector_slice(v, 1, 1);
     assert(s->length == 1, "correctly sliced");
     assert(vector_get_t(int, s, 0) == 1, "correctly sliced");
     vector_free(s);
+
+    s = vector_slice(v, 7, 2);
+    assert(s->length == 2, "correctly sliced");
+    assert(vector_get_t(int, s, 0) == 7, "correctly sliced");
+    assert(vector_get_t(int, s, 1) == 8, "correctly sliced");
+    vector_free(s);
+
     vector_free(v);
   end();
 
