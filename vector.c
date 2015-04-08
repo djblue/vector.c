@@ -3,18 +3,35 @@
 
 #include "vector.h"
 
-vector *vector_create(int unit) {
+static vector *vector_create_real(int unit, unsigned long *cap) {
 
   vector *v = (vector*) malloc(sizeof(vector));
 
   if (v == NULL) return NULL;
 
-  v->data = malloc(unit*VECTOR_INITIAL_CAPACITY);
+  v->capacity = cap ? *cap : VECTOR_INITIAL_CAPACITY;
+  if (v->capacity < VECTOR_INITIAL_CAPACITY) {
+    v->capacity = VECTOR_INITIAL_CAPACITY;
+  }
   v->unit = unit;
   v->length = 0;
-  v->capacity = VECTOR_INITIAL_CAPACITY;
+
+  v->data = calloc(v->capacity, v->unit);
+
+  if (v->data == NULL) {
+    free(v);
+    return NULL;
+  }
 
   return v;
+}
+
+vector *vector_create(int unit) {
+  return vector_create_real(unit, NULL);
+}
+
+vector *vector_create_with_capacity(int unit, unsigned long cap) {
+  return vector_create_real(unit, &cap);
 }
 
 void vector_free(vector* v) {

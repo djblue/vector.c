@@ -14,6 +14,8 @@ typedef struct {
 // create a new vector
 #define vector_create_t(type) (vector_create(sizeof(type)))
 vector *vector_create(int unit);
+// create a new vecctor with the indicated capacity
+vector *vector_create_with_capacity(int unit, unsigned long cap);
 // free vector resources
 void vector_free(vector *v);
 
