@@ -3,6 +3,8 @@
 
 #include "vector.h"
 
+typedef char byte_t;
+
 static vector *vector_create_real(size_t unit, unsigned long *cap) {
 
   vector *v = (vector*) malloc(sizeof(vector));
@@ -55,7 +57,7 @@ void vector_push(vector *v, void *elem) {
   }
 
   // copy over element
-  memcpy(v->data + (v->unit * v->length), elem, v->unit);
+  memcpy((byte_t*)v->data + (v->unit * v->length), elem, v->unit);
 
   v->length++; // increase length of vector
 }
@@ -69,20 +71,20 @@ void *vector_pop(vector* v) {
   v->length--;
 
   // return address of last element
-  return v->data + (v->unit * v->length);
+  return (byte_t*)v->data + (v->unit * v->length);
 }
 
 void *vector_get(vector *v, int i) {
   // i is out of range
   if  (i < 0 || i >= v->length) return NULL;
 
-  return v->data + (i * v->unit);
+  return (byte_t*)v->data + (i * v->unit);
 }
 
 void vector_splice(vector *v, int i, int n) {
 
   int max;
-  void *start = v->data + (v->unit * i);
+  byte_t *start = (byte_t*)v->data + (v->unit * i);
 
   // n should not exceed max
   max = v->length - i;
@@ -95,16 +97,16 @@ void vector_splice(vector *v, int i, int n) {
 
 vector *vector_slice (vector *v, int i, int n) {
   vector *s = vector_create(v->unit);
-  memcpy(s->data, v->data + (i * v->unit), n*v->unit);
+  memcpy(s->data, (byte_t*)v->data + (i * v->unit), n*v->unit);
   s->length = n;
   return s;
 }
 
 void vector_each(vector *v, void func (int, void *)) {
   int i;
-  void *p;
+  byte_t *p;
   for (i = 0; i < v->length; i++) {
-    p = v->data + (i * v->unit);
+    p = (byte_t*)v->data + (i * v->unit);
     func(i, p);
   }
 }
@@ -116,9 +118,9 @@ vector *vector_filter(vector *v, int func (void *)) {
   vector *filter = vector_create(v->unit);
 
   for (i = 0; i < v->length; i++) {
-    res = func(v->data + (i * v->unit));
+    res = func((byte_t*)v->data + (i * v->unit));
     if (res == 1) {
-      vector_push(filter, v->data + (i * v->unit));
+      vector_push(filter, (byte_t*)v->data + (i * v->unit));
     }
   }
 
@@ -133,7 +135,7 @@ vector *vector_map(vector *v, size_t unit, void *func (void *)) {
   vector *map = vector_create(unit);
 
   for (i = 0; i < v->length; i++) {
-    res = func(v->data + (i * v->unit));
+    res = func((byte_t*)v->data + (i * v->unit));
     vector_push(map, res);
     free(res);
   }
