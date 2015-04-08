@@ -6,7 +6,6 @@
 typedef char byte_t;
 
 static vector *vector_create_real(size_t unit, unsigned long *cap) {
-
   vector *v = (vector*) malloc(sizeof(vector));
 
   if (v == NULL) return NULL;
@@ -51,7 +50,6 @@ void vector_resize (vector *v) {
 }
 
 void vector_push(vector *v, void *elem) {
-
   if (v->length == v->capacity) {
     vector_resize(v);
   }
@@ -82,7 +80,6 @@ void *vector_get(vector *v, int i) {
 }
 
 void vector_splice(vector *v, int i, int n) {
-
   int max;
   byte_t *start = (byte_t*)v->data + (v->unit * i);
 
@@ -96,7 +93,7 @@ void vector_splice(vector *v, int i, int n) {
 }
 
 vector *vector_slice (vector *v, int i, int n) {
-  vector *s = vector_create(v->unit);
+  vector *s = vector_create_with_capacity(v->unit, n);
   memcpy(s->data, (byte_t*)v->data + (i * v->unit), n*v->unit);
   s->length = n;
   return s;
@@ -115,6 +112,8 @@ vector *vector_filter(vector *v, int func (void *)) {
 
   int i, res;
 
+  // no *_with_capacity because we have no idea how big the resulting
+  // vector could end up.
   vector *filter = vector_create(v->unit);
 
   for (i = 0; i < v->length; i++) {
@@ -132,7 +131,7 @@ vector *vector_map(vector *v, size_t unit, void *func (void *)) {
   int i;
   void *res;
 
-  vector *map = vector_create(unit);
+  vector *map = vector_create_with_capacity(unit, v->capacity);
 
   for (i = 0; i < v->length; i++) {
     res = func((byte_t*)v->data + (i * v->unit));
