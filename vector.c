@@ -41,12 +41,8 @@ void vector_free(vector* v) {
 }
 
 void vector_resize (vector *v) {
-  int cap = (int)(v->capacity * VECTOR_GROWTH_RATE);
-  void *p = malloc(cap * v->unit);
-  memcpy(p, v->data, v->length * v->unit);
-  free(v->data);
-  v->data = p;
-  v->capacity = cap;
+  v->capacity = (int)(v->capacity * VECTOR_GROWTH_RATE);
+  v->data = realloc(v->data, v->unit * v->capacity);
 }
 
 void vector_push(vector *v, void *elem) {
