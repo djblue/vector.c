@@ -3,7 +3,7 @@
 
 #include "vector.h"
 
-static vector *vector_create_real(int unit, unsigned long *cap) {
+static vector *vector_create_real(size_t unit, unsigned long *cap) {
 
   vector *v = (vector*) malloc(sizeof(vector));
 
@@ -26,11 +26,11 @@ static vector *vector_create_real(int unit, unsigned long *cap) {
   return v;
 }
 
-vector *vector_create(int unit) {
+vector *vector_create(size_t unit) {
   return vector_create_real(unit, NULL);
 }
 
-vector *vector_create_with_capacity(int unit, unsigned long cap) {
+vector *vector_create_with_capacity(size_t unit, unsigned long cap) {
   return vector_create_real(unit, &cap);
 }
 
@@ -125,7 +125,7 @@ vector *vector_filter(vector *v, int func (void *)) {
   return filter;
 }
 
-vector *vector_map(vector *v, int unit, void *func (void *)) {
+vector *vector_map(vector *v, size_t unit, void *func (void *)) {
 
   int i;
   void *res;

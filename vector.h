@@ -1,21 +1,23 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <stddef.h>
+
 #define VECTOR_INITIAL_CAPACITY 64
 #define VECTOR_GROWTH_RATE 1.5
 
 typedef struct {
   void *data;   // pointer to data of vector
-  int unit;     // unit size of any element in vector
+  size_t unit;  // unit size of any element in vector
   unsigned long length;   // how many element are currently stored
   unsigned long capacity; // how many spaces of unit size are available
 } vector;
 
 // create a new vector
 #define vector_create_t(type) (vector_create(sizeof(type)))
-vector *vector_create(int unit);
+vector *vector_create(size_t unit);
 // create a new vecctor with the indicated capacity
-vector *vector_create_with_capacity(int unit, unsigned long cap);
+vector *vector_create_with_capacity(size_t unit, unsigned long cap);
 // free vector resources
 void vector_free(vector *v);
 
@@ -42,6 +44,6 @@ void vector_each(vector *v, void func (int, void *));
 vector *vector_filter(vector *v, int func (void *));
 // get a new vector mapped from v
 #define vector_map_t(type,v,func) (vector_map(v,sizeof(type),func))
-vector *vector_map(vector *v, int unit, void *func (void *));
+vector *vector_map(vector *v, size_t unit, void *func (void *));
 
 #endif
