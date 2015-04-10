@@ -1,14 +1,20 @@
 bin=main
+obj=main.o vector.o
 
-all: main 
+CC=gcc
+CFLAGS=-std=c99 -g -O2 -Wall -pedantic
 
+all: $(bin)
 
-main: main.o vector.o ; gcc main.o vector.o -o $(bin)
-main.o: vector.h main.c ; gcc main.c -std=c99 -c
-vector.o: vector.h vector.c ; gcc -std=c99 vector.c -c
+$(bin): $(obj)
+	$(CC) -o $@ $^
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-clean: ; rm -f *.o $(bin)
+clean:
+	rm -f $(obj) $(bin)
 
-test: main ; @./main # run tests
+test: $(bin)
+	@./main # run tests
 
 .PHONY: test
